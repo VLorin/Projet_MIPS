@@ -1,12 +1,14 @@
 #include "translate.h"
-#include "memory.h"
+#include <stdio.h>
+#include <stdlib.h>
+//#include "memory.h"
 
 
 
 
 
 int main(int argc, char *argv[]){
-    
+    translate(argv[1]);
     
     
     
