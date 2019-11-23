@@ -18,7 +18,7 @@ void translate(char *nom_fichier){
         printf("%s",buffer);
         sscanf(buffer, "%s ", instruction);
         
-        if( strcmp( instruction, "ADDI") == 0){
+        if( strcmp( instruction, "ADDI") == 0){ // Add Immediate Word
             nombre_operande = 3;
             sscanf(buffer, "%s $%d,$%d,%d", instruction, &var1, &var2, &var3);
         }
@@ -30,11 +30,11 @@ void translate(char *nom_fichier){
             nombre_operande = 3;
             sscanf(buffer, "%s $%d,$%d,$%d", instruction, &var1, &var2, &var3);
         }
-        else if( strcmp( instruction, "BEQ") == 0){
+        else if( strcmp( instruction, "BEQ") == 0){ // Branch on Equal
             nombre_operande = 3;
             sscanf(buffer, "%s $%d,$%d,%d", instruction, &var1, &var2, &var3);
         }
-        else if( strcmp( instruction, "BGTZ") == 0){
+        else if( strcmp( instruction, "BGTZ") == 0){ // Branch on Greater Than Zero
             nombre_operande = 2;
             sscanf(buffer, "%s $%d,%d", instruction, &var1, &var2);
         }
@@ -42,15 +42,39 @@ void translate(char *nom_fichier){
             nombre_operande = 2;
             sscanf(buffer, "%s $%d,%d", instruction, &var1, &var2);
         }
-        else if( strcmp( instruction, "BNE") == 0){
+        else if( strcmp( instruction, "BNE") == 0){ // Branch on Not Equal
             nombre_operande = 3;
             sscanf(buffer, "%s $%d,$%d,%d", instruction, &var1, &var2, &var3);
+        }
+        else if( strcmp( instruction, "DIV") == 0){ // Divide Word
+            nombre_operande = 2;
+            sscanf(buffer, "%s $%d,$%d", instruction, &var1, &var2);
+        }
+        else if( strcmp( instruction, "JR") == 0){
+            nombre_operande = 1;
+            sscanf(buffer, "%s $%d", instruction, &var1);
+        }
+        else if( strcmp( instruction, "JAL") == 0){
+            nombre_operande = 1;
+            sscanf(buffer, "%s %d", instruction, &var1);
         }
         else if( strcmp( instruction, "J") == 0){
             nombre_operande = 1;
             sscanf(buffer, "%s %d", instruction, &var1);
         }
-        else if( strcmp( instruction, "JR") == 0){
+        else if( strcmp( instruction, "LUI") == 0){ // Load Upper Immediate
+            nombre_operande = 2;
+            sscanf(buffer, "%s $%d,%d", instruction, &var1, &var2);
+        }
+        else if( strcmp( instruction, "LW") == 0){ // Load Word
+            nombre_operande = 2;
+            sscanf(buffer, "%s $%d,%d", instruction, &var1, &var2);
+        }
+        else if( strcmp( instruction, "MFHI") == 0){ // Move From HI Register
+            nombre_operande = 1;
+            sscanf(buffer, "%s $%d", instruction, &var1);
+        }
+        else if( strcmp( instruction, "MFLO") == 0){ // Move From LO Register
             nombre_operande = 1;
             sscanf(buffer, "%s $%d", instruction, &var1);
         }
@@ -62,6 +86,18 @@ void translate(char *nom_fichier){
             nombre_operande = 3;
             sscanf(buffer, "%s $%d,$%d,%d", instruction, &var1, &var2, &var3);
         }
+        else if( strcmp( instruction, "MULT") == 0){ // Multiply Word
+            nombre_operande = 2;
+            sscanf(buffer, "%s $%d,$%d", instruction, &var1, &var2);
+        }
+        else if( strcmp( instruction, "NOP") == 0){ // No Operation
+            nombre_operande = 0;
+            sscanf(buffer, "%s ", instruction);
+        }
+        else if( strcmp( instruction, "OR") == 0){
+            nombre_operande = 3;
+            sscanf(buffer, "%s $%d,$%d,$%d", instruction, &var1, &var2, &var3);
+        
         else if( strcmp( instruction, "SLT") == 0){
             nombre_operande = 3;
             sscanf(buffer, "%s $%d,$%d,$%d", instruction, &var1, &var2, &var3);
@@ -86,10 +122,7 @@ void translate(char *nom_fichier){
             nombre_operande = 0;
             sscanf(buffer, "%s", instruction);
         }
-        else if( strcmp( instruction, "SW") == 0){
-            nombre_operande = 2;
-            sscanf(buffer, "%s $%d,%d", instruction, &var1, &var2);
-        }
+        
         printf("instruction = %s, var1 = %d, var2 = %d, var3 = %d \n", instruction, var1, var2, var3);
     }
     
