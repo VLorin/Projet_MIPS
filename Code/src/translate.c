@@ -38,6 +38,10 @@ void translate(char *nom_fichier){
             nombre_operande = 2;
             sscanf(buffer, "%s $%d,%d", instruction, &var1, &var2);
         }
+        else if( strcmp( instruction, "BLEZ") == 0){ // Branch on Less Than or Equal to Zero
+            nombre_operande = 2;
+            sscanf(buffer, "%s $%d,%d", instruction, &var1, &var2);
+        }
         else if( strcmp( instruction, "BNE") == 0){
             nombre_operande = 3;
             sscanf(buffer, "%s $%d,$%d,%d", instruction, &var1, &var2, &var3);
