@@ -2,129 +2,346 @@
 
 
 
-void translate(char *nom_fichier){
-    FILE *fichier_source = fopen(nom_fichier,"r");
-    
+void translate(char *nom_fichier_source, char *nom_fichier_instruction){
+    /* Opening of files */
+    FILE *fichier_source = fopen(nom_fichier_source,"r");
+    FILE *fichier_instruction = fopen(nom_fichier_instruction,"w");
     if (fichier_source == NULL){
-        printf("Erreur ouverture fichier_source\n");
+        printf("Erreur ouverture fichier_source : %s\n",nom_fichier_source);
+        exit(0);
+    }
+    if (fichier_instruction == NULL){
+        printf("Erreur ouverture fichier_instruction : %s\n",nom_fichier_instruction);
         exit(0);
     }
     
     char *buffer = (char *)malloc(MAX_LENGTH);
     char instruction[10];
-    int var1, var2, var3, nombre_operande;
+    char instruction_binaire[32]; // 32 bits
+    long instruction_hexa; // 4 octets
+    int var1, var2, var3;
     while( !feof (fichier_source)){
         fgets (buffer, MAX_LENGTH, fichier_source);
-        printf("%s",buffer);
+        printf("%s\n",buffer);
         sscanf(buffer, "%s ", instruction);
         
         if( strcmp( instruction, "ADDI") == 0){ // Add Immediate Word
-            nombre_operande = 3;
+            
             sscanf(buffer, "%s $%d,$%d,%d", instruction, &var1, &var2, &var3);
+            instruction_binaire[32]='\n';
+            instruction_binaire[31]='0';
+            instruction_binaire[30]='0';
+            instruction_binaire[29]='1';
+            instruction_binaire[28]='0';
+            instruction_binaire[27]='0';
+            instruction_binaire[26]='0';
+            int_to_binary(instruction_binaire,21,25,var2);
+            int_to_binary(instruction_binaire,16,20,var1);
+            int_to_binary(instruction_binaire,0,15,var3);
+            instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
+            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "ADD") == 0){
-            nombre_operande = 3;
+            
             sscanf(buffer, "%s $%d,$%d,$%d", instruction, &var1, &var2, &var3);
+            instruction_binaire[32]='\n';
+            int_to_binary(instruction_binaire,26,31,0); // 000000 => SPECIAL
+            int_to_binary(instruction_binaire,21,25,var2);
+            int_to_binary(instruction_binaire,16,20,var3);
+            int_to_binary(instruction_binaire,11,15,var1);
+            int_to_binary(instruction_binaire,6,10,0);  // 0 => 00000
+            int_to_binary(instruction_binaire,0,5,32); // 32 => 100000
+            instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
+            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "AND") == 0){
-            nombre_operande = 3;
+            
             sscanf(buffer, "%s $%d,$%d,$%d", instruction, &var1, &var2, &var3);
+            instruction_binaire[32]='\n';
+            int_to_binary(instruction_binaire,26,31,0); // 000000 => SPECIAL
+            int_to_binary(instruction_binaire,21,25,var2);
+            int_to_binary(instruction_binaire,16,20,var3);
+            int_to_binary(instruction_binaire,11,15,var1);
+            int_to_binary(instruction_binaire,6,10,0);  // 0 => 00000
+            int_to_binary(instruction_binaire,0,5,36); // 36 => 100100
+            instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
+            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "BEQ") == 0){ // Branch on Equal
-            nombre_operande = 3;
+            
             sscanf(buffer, "%s $%d,$%d,%d", instruction, &var1, &var2, &var3);
+            instruction_binaire[32]='\n';
+            int_to_binary(instruction_binaire,26,31,4); 
+            int_to_binary(instruction_binaire,21,25,var1);
+            int_to_binary(instruction_binaire,16,20,var2);
+            int_to_binary(instruction_binaire,0,15,var3); // var3 = OFFSET 16 bits
+            instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
+            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "BGTZ") == 0){ // Branch on Greater Than Zero
-            nombre_operande = 2;
+            
             sscanf(buffer, "%s $%d,%d", instruction, &var1, &var2);
+            instruction_binaire[32]='\n';
+            int_to_binary(instruction_binaire,26,31,7); 
+            int_to_binary(instruction_binaire,21,25,var1);
+            int_to_binary(instruction_binaire,16,20,0);
+            int_to_binary(instruction_binaire,0,15,var2); // var2 = OFFSET 16 bits
+            instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
+            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "BLEZ") == 0){ // Branch on Less Than or Equal to Zero
-            nombre_operande = 2;
+            
             sscanf(buffer, "%s $%d,%d", instruction, &var1, &var2);
+            instruction_binaire[32]='\n';
+            int_to_binary(instruction_binaire,26,31,6);
+            int_to_binary(instruction_binaire,21,25,var1);
+            int_to_binary(instruction_binaire,16,20,0);
+            int_to_binary(instruction_binaire,0,15,var2); //var2 = OFFSET 16 bits
+            instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
+            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "BNE") == 0){ // Branch on Not Equal
-            nombre_operande = 3;
+            
             sscanf(buffer, "%s $%d,$%d,%d", instruction, &var1, &var2, &var3);
+            instruction_binaire[32]='\n';
+            int_to_binary(instruction_binaire,26,31,5);
+            int_to_binary(instruction_binaire,21,25,var1);
+            int_to_binary(instruction_binaire,16,20,var2);
+            int_to_binary(instruction_binaire,0,15,var3); //var3 = OFFSET 16 bits
+            instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
+            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "DIV") == 0){ // Divide Word
-            nombre_operande = 2;
+            
             sscanf(buffer, "%s $%d,$%d", instruction, &var1, &var2);
+            instruction_binaire[32]='\n';
+            int_to_binary(instruction_binaire,26,31,0);
+            int_to_binary(instruction_binaire,21,25,var1);
+            int_to_binary(instruction_binaire,16,20,var2);
+            int_to_binary(instruction_binaire,6,15,0); 
+            int_to_binary(instruction_binaire,0,5,26); // 26 => 011010
+            instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
+            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "JR") == 0){
-            nombre_operande = 1;
+            
             sscanf(buffer, "%s $%d", instruction, &var1);
+            instruction_binaire[32]='\n';
+            int_to_binary(instruction_binaire,26,31,0);
+            int_to_binary(instruction_binaire,21,25,var1);
+            int_to_binary(instruction_binaire,11,20,0);
+            int_to_binary(instruction_binaire,6,10,0); //bits hint à 0, voir doc
+            int_to_binary(instruction_binaire,0,5,8);
+            instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
+            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "JAL") == 0){
-            nombre_operande = 1;
+            
             sscanf(buffer, "%s %d", instruction, &var1);
+            instruction_binaire[32]='\n';
+            int_to_binary(instruction_binaire,26,31,3);
+            int_to_binary(instruction_binaire,0,25,var1); //var1 = instr_index
+            instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
+            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "J") == 0){
-            nombre_operande = 1;
+            
             sscanf(buffer, "%s %d", instruction, &var1);
+            instruction_binaire[32]='\n';
+            int_to_binary(instruction_binaire,26,31,2);
+            int_to_binary(instruction_binaire,0,25,var1); //var1 = instr_index
+            instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
+            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "LUI") == 0){ // Load Upper Immediate
-            nombre_operande = 2;
+            
             sscanf(buffer, "%s $%d,%d", instruction, &var1, &var2);
+            instruction_binaire[32]='\n';
+            int_to_binary(instruction_binaire,26,31,15);
+            int_to_binary(instruction_binaire,21,25,0);
+            int_to_binary(instruction_binaire,16,20,var1);
+            int_to_binary(instruction_binaire,0,15,var2);
+            instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
+            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "LW") == 0){ // Load Word
-            nombre_operande = 2;
-            sscanf(buffer, "%s $%d,%d", instruction, &var1, &var2);
+            
+            sscanf(buffer, "%s $%d,%d(%d)", instruction, &var1, &var2, &var3);
+            instruction_binaire[32]='\n';
+            int_to_binary(instruction_binaire,26,31,35);
+            int_to_binary(instruction_binaire,21,25,var3); //var3 = base
+            int_to_binary(instruction_binaire,16,20,var1);
+            int_to_binary(instruction_binaire,0,15,var2); 
+            instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
+            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "MFHI") == 0){ // Move From HI Register
-            nombre_operande = 1;
+            
             sscanf(buffer, "%s $%d", instruction, &var1);
+            instruction_binaire[32]='\n';
+            int_to_binary(instruction_binaire,26,31,0);
+            int_to_binary(instruction_binaire,16,25,0);
+            int_to_binary(instruction_binaire,11,15,var1);
+            int_to_binary(instruction_binaire,6,10,0);
+            int_to_binary(instruction_binaire,0,5,32); // 32 => 010000
+            instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
+            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "MFLO") == 0){ // Move From LO Register
-            nombre_operande = 1;
+            
             sscanf(buffer, "%s $%d", instruction, &var1);
+            instruction_binaire[32]='\n';
+            int_to_binary(instruction_binaire,26,31,0);
+            int_to_binary(instruction_binaire,16,25,0);
+            int_to_binary(instruction_binaire,11,15,var1);
+            int_to_binary(instruction_binaire,6,10,0);
+            int_to_binary(instruction_binaire,0,5,34); // 32 => 010010
+            instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
+            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "ROTR") == 0){
-            nombre_operande = 3;
+            
             sscanf(buffer, "%s $%d,$%d,$%d", instruction, &var1, &var2, &var3);
+            instruction_binaire[32]='\n';
+            int_to_binary(instruction_binaire,21,31,1); // le bit R1 est mis à 1 ici, à verifier plus tard
+            int_to_binary(instruction_binaire,16,20,var2);
+            int_to_binary(instruction_binaire,11,15,var1);
+            int_to_binary(instruction_binaire,6,10,var3);
+            int_to_binary(instruction_binaire,0,5,2); // 2 => 000010
+            instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
+            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "SLL") == 0){
-            nombre_operande = 3;
+            
             sscanf(buffer, "%s $%d,$%d,%d", instruction, &var1, &var2, &var3);
+            instruction_binaire[32]='\n';
+            int_to_binary(instruction_binaire,21,31,0);
+            int_to_binary(instruction_binaire,16,20,var2);
+            int_to_binary(instruction_binaire,11,15,var1);
+            int_to_binary(instruction_binaire,6,10,var3);
+            int_to_binary(instruction_binaire,0,5,0); 
+            instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
+            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "MULT") == 0){ // Multiply Word
-            nombre_operande = 2;
+            
             sscanf(buffer, "%s $%d,$%d", instruction, &var1, &var2);
+            instruction_binaire[32]='\n';
+            int_to_binary(instruction_binaire,26,31,0);
+            int_to_binary(instruction_binaire,21,25,var1);
+            int_to_binary(instruction_binaire,16,20,var2);
+            int_to_binary(instruction_binaire,6,15,0);
+            int_to_binary(instruction_binaire,0,5,24); // 24 => 011000
+            instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
+            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "NOP") == 0){ // No Operation
-            nombre_operande = 0;
+            
             sscanf(buffer, "%s ", instruction);
+            instruction_binaire[32]='\n';
+            int_to_binary(instruction_binaire,0,31,0);
+            instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
+            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "OR") == 0){
-            nombre_operande = 3;
+            
             sscanf(buffer, "%s $%d,$%d,$%d", instruction, &var1, &var2, &var3);
-        
+            instruction_binaire[32]='\n';
+            int_to_binary(instruction_binaire,26,31,0);
+            int_to_binary(instruction_binaire,21,25,var2);
+            int_to_binary(instruction_binaire,16,20,var3);
+            int_to_binary(instruction_binaire,11,15,var1);
+            int_to_binary(instruction_binaire,6,10,0);
+            int_to_binary(instruction_binaire,0,5,37); // 37 => 100101
+            instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
+            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
+        }
         else if( strcmp( instruction, "SLT") == 0){
-            nombre_operande = 3;
+            
             sscanf(buffer, "%s $%d,$%d,$%d", instruction, &var1, &var2, &var3);
+            instruction_binaire[32]='\n';
+            int_to_binary(instruction_binaire,26,31,0);
+            int_to_binary(instruction_binaire,21,25,var2);
+            int_to_binary(instruction_binaire,16,20,var3);
+            int_to_binary(instruction_binaire,11,15,var1);
+            int_to_binary(instruction_binaire,6,10,0);
+            int_to_binary(instruction_binaire,0,5,42); // 42 => 101010
+            instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
+            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "SRL") == 0){
-            nombre_operande = 3;
+            
             sscanf(buffer, "%s $%d,$%d,%d", instruction, &var1, &var2, &var3);
+            instruction_binaire[32]='\n';
+            int_to_binary(instruction_binaire,21,31,0); // bit R0 mis à 0, à verifier plus tard
+            int_to_binary(instruction_binaire,16,20,var2);
+            int_to_binary(instruction_binaire,11,15,var1);
+            int_to_binary(instruction_binaire,6,10,var3);
+            int_to_binary(instruction_binaire,0,5,2); 
+            instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
+            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "SUB") == 0){
-            nombre_operande = 3;
+            
             sscanf(buffer, "%s $%d,$%d,$%d", instruction, &var1, &var2, &var3);
+            instruction_binaire[32]='\n';
+            int_to_binary(instruction_binaire,26,31,0);
+            int_to_binary(instruction_binaire,21,25,var2);
+            int_to_binary(instruction_binaire,16,20,var3);
+            int_to_binary(instruction_binaire,11,15,var1);
+            int_to_binary(instruction_binaire,6,10,0);
+            int_to_binary(instruction_binaire,0,5,34); // 34 => 100010
+            instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
+            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "SW") == 0){
-            nombre_operande = 2;
-            sscanf(buffer, "%s $%d,%d", instruction, &var1, &var2);
+            
+            sscanf(buffer, "%s $%d,%d(%d)", instruction, &var1, &var2, &var2);
+            instruction_binaire[32]='\n';
+            int_to_binary(instruction_binaire,26,31,43); // 43 => 101011
+            int_to_binary(instruction_binaire,21,25,var3);
+            int_to_binary(instruction_binaire,16,20,var1);
+            int_to_binary(instruction_binaire,0,15,var2);
+            instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
+            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "XOR") == 0){
-            nombre_operande = 3;
+            
             sscanf(buffer, "%s $%d,$%d,$%d", instruction, &var1, &var2, &var3);
+            instruction_binaire[32]='\n';
+            int_to_binary(instruction_binaire,26,31,0);
+            int_to_binary(instruction_binaire,21,25,var2);
+            int_to_binary(instruction_binaire,16,20,var3);
+            int_to_binary(instruction_binaire,11,15,var1);
+            int_to_binary(instruction_binaire,6,10,0); 
+            int_to_binary(instruction_binaire,0,5,38); // 38 => 100110
+            instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
+            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "SYSCALL") == 0){
-            nombre_operande = 0;
+            
             sscanf(buffer, "%s", instruction);
+            instruction_binaire[32]='\n';
+            int_to_binary(instruction_binaire,26,31,0);
+            int_to_binary(instruction_binaire,6,25,0); // code fiel is available for use as software parameters
+            int_to_binary(instruction_binaire,0,5,12); 
+            instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
+            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
         }
         
-        printf("instruction = %s, var1 = %d, var2 = %d, var3 = %d \n", instruction, var1, var2, var3);
+        //printf("instruction = %s, var1 = %d, var2 = %d, var3 = %d \n", instruction, var1, var2, var3);
+        printf("binaire = %s\n",instruction_binaire);
     }
+    fclose(fichier_source);
+    fclose(fichier_instruction);
     
+}
+
+void int_to_binary(char *instruction_binaire,int bit_debut, int bit_fin, int valeur){
+
+    for(int i = bit_debut; i<=bit_fin; i++){
+        instruction_binaire[i] = (valeur % 2) + '0';
+        valeur=valeur/2;
+    }
 }
 
