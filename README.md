@@ -3,7 +3,7 @@ Emulator of a MIPS processor
 ## Goals
 As part of our study I will with a classmate create an emulator of a 32 bits MIPS processor.
 All the code is written in C
-## List of instruction implemented 
+## Instruction list implemented 
 Instruction | Format
 ------------|--------
 Add Word| ADD rd, rs, rt
