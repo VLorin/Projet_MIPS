@@ -37,7 +37,7 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
             instruction_binaire[26]='0';
             int_to_binary(instruction_binaire,21,25,var2);
             int_to_binary(instruction_binaire,16,20,var1);
-            int_to_binary(instruction_binaire,0,15,var3);
+            int_to_binary_signed(instruction_binaire,0,15,var3);
             instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
             fprintf(fichier_instruction,"%08lX\n",instruction_hexa); // decimal => hexa
         }
@@ -74,7 +74,7 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
             int_to_binary(instruction_binaire,26,31,4); 
             int_to_binary(instruction_binaire,21,25,var1);
             int_to_binary(instruction_binaire,16,20,var2);
-            int_to_binary(instruction_binaire,0,15,var3); // var3 = OFFSET 16 bits
+            int_to_binary_signed(instruction_binaire,0,15,var3); // var3 = OFFSET 16 bits
             instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
             fprintf(fichier_instruction,"%08lX\n",instruction_hexa); // decimal => hexa
         }
@@ -85,7 +85,7 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
             int_to_binary(instruction_binaire,26,31,7); 
             int_to_binary(instruction_binaire,21,25,var1);
             int_to_binary(instruction_binaire,16,20,0);
-            int_to_binary(instruction_binaire,0,15,var2); // var2 = OFFSET 16 bits
+            int_to_binary_signed(instruction_binaire,0,15,var2); // var2 = OFFSET 16 bits
             instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
             fprintf(fichier_instruction,"%08lX\n",instruction_hexa); // decimal => hexa
         }
@@ -96,7 +96,7 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
             int_to_binary(instruction_binaire,26,31,6);
             int_to_binary(instruction_binaire,21,25,var1);
             int_to_binary(instruction_binaire,16,20,0);
-            int_to_binary(instruction_binaire,0,15,var2); //var2 = OFFSET 16 bits
+            int_to_binary_signed(instruction_binaire,0,15,var2); //var2 = OFFSET 16 bits
             instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
             fprintf(fichier_instruction,"%08lX\n",instruction_hexa); // decimal => hexa
         }
@@ -107,7 +107,7 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
             int_to_binary(instruction_binaire,26,31,5);
             int_to_binary(instruction_binaire,21,25,var1);
             int_to_binary(instruction_binaire,16,20,var2);
-            int_to_binary(instruction_binaire,0,15,var3); //var3 = OFFSET 16 bits
+            int_to_binary_signed(instruction_binaire,0,15,var3); //var3 = OFFSET 16 bits
             instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
             fprintf(fichier_instruction,"%08lX\n",instruction_hexa); // decimal => hexa
         }
@@ -160,7 +160,7 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
             int_to_binary(instruction_binaire,26,31,15);
             int_to_binary(instruction_binaire,21,25,0);
             int_to_binary(instruction_binaire,16,20,var1);
-            int_to_binary(instruction_binaire,0,15,var2);
+            int_to_binary_signed(instruction_binaire,0,15,var2);
             instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
             fprintf(fichier_instruction,"%08lX\n",instruction_hexa); // decimal => hexa
         }
@@ -171,7 +171,7 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
             int_to_binary(instruction_binaire,26,31,35);
             int_to_binary(instruction_binaire,21,25,var3); //var3 = base
             int_to_binary(instruction_binaire,16,20,var1);
-            int_to_binary(instruction_binaire,0,15,var2); 
+            int_to_binary_signed(instruction_binaire,0,15,var2); 
             instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
             fprintf(fichier_instruction,"%08lX\n",instruction_hexa); // decimal => hexa
         }
@@ -301,7 +301,7 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
             int_to_binary(instruction_binaire,26,31,43); // 43 => 101011
             int_to_binary(instruction_binaire,21,25,var3);
             int_to_binary(instruction_binaire,16,20,var1);
-            int_to_binary(instruction_binaire,0,15,var2);
+            int_to_binary_signed(instruction_binaire,0,15,var2);
             instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
             fprintf(fichier_instruction,"%08lX\n",instruction_hexa); // decimal => hexa
         }
@@ -323,7 +323,7 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
             sscanf(buffer, "%s", instruction);
             instruction_binaire[32]='\n';
             int_to_binary(instruction_binaire,26,31,0);
-            int_to_binary(instruction_binaire,6,25,0); // code fiel is available for use as software parameters
+            int_to_binary(instruction_binaire,6,25,0); // code field is available for use as software parameters
             int_to_binary(instruction_binaire,0,5,12); 
             instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
             fprintf(fichier_instruction,"%08lX\n",instruction_hexa); // decimal => hexa
@@ -337,11 +337,50 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
     
 }
 
-void int_to_binary(char *instruction_binaire,int bit_debut, int bit_fin, int valeur){
-
-    for(int i = bit_debut; i<=bit_fin; i++){
-        instruction_binaire[i] = (valeur % 2) + '0';
-        valeur=valeur/2;
+void int_to_binary_signed(char *instruction_binaire,int bit_debut, int bit_fin, int valeur){
+    if(valeur>=0){
+        for(int i = bit_debut; i<=bit_fin-1; i++){
+            instruction_binaire[i] = (valeur % 2) + '0';
+            valeur=valeur/2;
+        }
+        instruction_binaire[bit_fin]= 0 + '0';
+    }   
+    else if(valeur<0){
+        valeur=abs(valeur);
+        for(int i = bit_debut; i<=bit_fin - 1; i++){
+            instruction_binaire[i] = (valeur % 2) + '0'; // on inverse pour le negatif
+            valeur=valeur/2;
+            if(instruction_binaire[i] == '0'){
+                instruction_binaire[i] = '1';
+            }
+            else{
+                instruction_binaire[i] = '0';
+            }
+        }
+        instruction_binaire[bit_fin]= 1 + '0';
+        
+        
+        int retenu = 1;
+        int i=bit_debut;
+        while((retenu = 1) && (i < bit_fin)){
+            if(instruction_binaire[i] == '0'){
+                instruction_binaire[i] = '1';
+                retenu = 0;
+            }
+            else{
+                instruction_binaire[i] = '0';
+            }
+            i++;
+        }
+        if(i == bit_fin){
+            printf("Attention valeur trop négative, cf int_to_binary\n");
+        }
     }
 }
 
+void int_to_binary(char *instruction_binaire,int bit_debut, int bit_fin, int valeur){
+    for(int i = bit_debut; i<=bit_fin; i++){
+            instruction_binaire[i] = (valeur % 2) + '0';
+            valeur=valeur/2;
+    }
+}

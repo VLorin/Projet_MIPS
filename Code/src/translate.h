@@ -10,4 +10,5 @@
 
 void translate(char *nom_fichier_source, char *nom_fichier_instruction);
 void int_to_binary(char *instruction_binaire,int bit_debut, int bit_fin, int valeur);
+void int_to_binary_signed(char *instruction_binaire,int bit_debut, int bit_fin, int valeur);
 #endif
