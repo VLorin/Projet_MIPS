@@ -39,7 +39,7 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
             int_to_binary(instruction_binaire,16,20,var1);
             int_to_binary(instruction_binaire,0,15,var3);
             instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
-            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
+            fprintf(fichier_instruction,"%08lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "ADD") == 0){
             
@@ -52,7 +52,7 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
             int_to_binary(instruction_binaire,6,10,0);  // 0 => 00000
             int_to_binary(instruction_binaire,0,5,32); // 32 => 100000
             instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
-            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
+            fprintf(fichier_instruction,"%08lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "AND") == 0){
             
@@ -65,7 +65,7 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
             int_to_binary(instruction_binaire,6,10,0);  // 0 => 00000
             int_to_binary(instruction_binaire,0,5,36); // 36 => 100100
             instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
-            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
+            fprintf(fichier_instruction,"%08lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "BEQ") == 0){ // Branch on Equal
             
@@ -76,7 +76,7 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
             int_to_binary(instruction_binaire,16,20,var2);
             int_to_binary(instruction_binaire,0,15,var3); // var3 = OFFSET 16 bits
             instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
-            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
+            fprintf(fichier_instruction,"%08lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "BGTZ") == 0){ // Branch on Greater Than Zero
             
@@ -87,7 +87,7 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
             int_to_binary(instruction_binaire,16,20,0);
             int_to_binary(instruction_binaire,0,15,var2); // var2 = OFFSET 16 bits
             instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
-            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
+            fprintf(fichier_instruction,"%08lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "BLEZ") == 0){ // Branch on Less Than or Equal to Zero
             
@@ -98,7 +98,7 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
             int_to_binary(instruction_binaire,16,20,0);
             int_to_binary(instruction_binaire,0,15,var2); //var2 = OFFSET 16 bits
             instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
-            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
+            fprintf(fichier_instruction,"%08lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "BNE") == 0){ // Branch on Not Equal
             
@@ -109,7 +109,7 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
             int_to_binary(instruction_binaire,16,20,var2);
             int_to_binary(instruction_binaire,0,15,var3); //var3 = OFFSET 16 bits
             instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
-            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
+            fprintf(fichier_instruction,"%08lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "DIV") == 0){ // Divide Word
             
@@ -121,7 +121,7 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
             int_to_binary(instruction_binaire,6,15,0); 
             int_to_binary(instruction_binaire,0,5,26); // 26 => 011010
             instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
-            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
+            fprintf(fichier_instruction,"%08lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "JR") == 0){
             
@@ -133,7 +133,7 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
             int_to_binary(instruction_binaire,6,10,0); //bits hint à 0, voir doc
             int_to_binary(instruction_binaire,0,5,8);
             instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
-            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
+            fprintf(fichier_instruction,"%08lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "JAL") == 0){
             
@@ -142,7 +142,7 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
             int_to_binary(instruction_binaire,26,31,3);
             int_to_binary(instruction_binaire,0,25,var1); //var1 = instr_index
             instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
-            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
+            fprintf(fichier_instruction,"%08lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "J") == 0){
             
@@ -151,7 +151,7 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
             int_to_binary(instruction_binaire,26,31,2);
             int_to_binary(instruction_binaire,0,25,var1); //var1 = instr_index
             instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
-            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
+            fprintf(fichier_instruction,"%08lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "LUI") == 0){ // Load Upper Immediate
             
@@ -162,7 +162,7 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
             int_to_binary(instruction_binaire,16,20,var1);
             int_to_binary(instruction_binaire,0,15,var2);
             instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
-            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
+            fprintf(fichier_instruction,"%08lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "LW") == 0){ // Load Word
             
@@ -173,7 +173,7 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
             int_to_binary(instruction_binaire,16,20,var1);
             int_to_binary(instruction_binaire,0,15,var2); 
             instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
-            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
+            fprintf(fichier_instruction,"%08lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "MFHI") == 0){ // Move From HI Register
             
@@ -185,7 +185,7 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
             int_to_binary(instruction_binaire,6,10,0);
             int_to_binary(instruction_binaire,0,5,32); // 32 => 010000
             instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
-            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
+            fprintf(fichier_instruction,"%08lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "MFLO") == 0){ // Move From LO Register
             
@@ -197,7 +197,7 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
             int_to_binary(instruction_binaire,6,10,0);
             int_to_binary(instruction_binaire,0,5,34); // 32 => 010010
             instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
-            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
+            fprintf(fichier_instruction,"%08lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "ROTR") == 0){
             
@@ -209,7 +209,7 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
             int_to_binary(instruction_binaire,6,10,var3);
             int_to_binary(instruction_binaire,0,5,2); // 2 => 000010
             instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
-            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
+            fprintf(fichier_instruction,"%08lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "SLL") == 0){
             
@@ -221,7 +221,7 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
             int_to_binary(instruction_binaire,6,10,var3);
             int_to_binary(instruction_binaire,0,5,0); 
             instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
-            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
+            fprintf(fichier_instruction,"%08lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "MULT") == 0){ // Multiply Word
             
@@ -233,7 +233,7 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
             int_to_binary(instruction_binaire,6,15,0);
             int_to_binary(instruction_binaire,0,5,24); // 24 => 011000
             instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
-            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
+            fprintf(fichier_instruction,"%08lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "NOP") == 0){ // No Operation
             
@@ -241,7 +241,7 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
             instruction_binaire[32]='\n';
             int_to_binary(instruction_binaire,0,31,0);
             instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
-            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
+            fprintf(fichier_instruction,"%08lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "OR") == 0){
             
@@ -254,7 +254,7 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
             int_to_binary(instruction_binaire,6,10,0);
             int_to_binary(instruction_binaire,0,5,37); // 37 => 100101
             instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
-            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
+            fprintf(fichier_instruction,"%08lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "SLT") == 0){
             
@@ -267,7 +267,7 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
             int_to_binary(instruction_binaire,6,10,0);
             int_to_binary(instruction_binaire,0,5,42); // 42 => 101010
             instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
-            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
+            fprintf(fichier_instruction,"%08lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "SRL") == 0){
             
@@ -279,7 +279,7 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
             int_to_binary(instruction_binaire,6,10,var3);
             int_to_binary(instruction_binaire,0,5,2); 
             instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
-            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
+            fprintf(fichier_instruction,"%08lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "SUB") == 0){
             
@@ -292,7 +292,7 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
             int_to_binary(instruction_binaire,6,10,0);
             int_to_binary(instruction_binaire,0,5,34); // 34 => 100010
             instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
-            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
+            fprintf(fichier_instruction,"%08lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "SW") == 0){
             
@@ -303,7 +303,7 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
             int_to_binary(instruction_binaire,16,20,var1);
             int_to_binary(instruction_binaire,0,15,var2);
             instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
-            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
+            fprintf(fichier_instruction,"%08lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "XOR") == 0){
             
@@ -316,7 +316,7 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
             int_to_binary(instruction_binaire,6,10,0); 
             int_to_binary(instruction_binaire,0,5,38); // 38 => 100110
             instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
-            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
+            fprintf(fichier_instruction,"%08lX\n",instruction_hexa); // decimal => hexa
         }
         else if( strcmp( instruction, "SYSCALL") == 0){
             
@@ -326,7 +326,7 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
             int_to_binary(instruction_binaire,6,25,0); // code fiel is available for use as software parameters
             int_to_binary(instruction_binaire,0,5,12); 
             instruction_hexa = strtol(instruction_binaire, NULL, 2); // binaire => decimal
-            fprintf(fichier_instruction,"%lX\n",instruction_hexa); // decimal => hexa
+            fprintf(fichier_instruction,"%08lX\n",instruction_hexa); // decimal => hexa
         }
         
         //printf("instruction = %s, var1 = %d, var2 = %d, var3 = %d \n", instruction, var1, var2, var3);
