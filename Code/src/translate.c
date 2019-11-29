@@ -330,7 +330,11 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
         }
         
         //printf("instruction = %s, var1 = %d, var2 = %d, var3 = %d \n", instruction, var1, var2, var3);
-        printf("binaire = %s\n",instruction_binaire);
+        printf("binaire dans l'order = ");
+        for(int i = 31; i>0; i--){
+            printf("%c",instruction_binaire[i]);
+        }
+        printf("\n");
     }
     fclose(fichier_source);
     fclose(fichier_instruction);
@@ -348,7 +352,7 @@ void int_to_binary_signed(char *instruction_binaire,int bit_debut, int bit_fin, 
     else if(valeur<0){
         valeur=abs(valeur);
         for(int i = bit_debut; i<=bit_fin - 1; i++){
-            instruction_binaire[i] = (valeur % 2) + '0'; // on inverse pour le negatif
+            instruction_binaire[i] = (valeur % 2) + '0'; 
             valeur=valeur/2;
             if(instruction_binaire[i] == '0'){
                 instruction_binaire[i] = '1';
@@ -362,7 +366,8 @@ void int_to_binary_signed(char *instruction_binaire,int bit_debut, int bit_fin, 
         
         int retenu = 1;
         int i=bit_debut;
-        while((retenu = 1) && (i < bit_fin)){
+        
+        while((retenu == 1) && (i < bit_fin)){
             if(instruction_binaire[i] == '0'){
                 instruction_binaire[i] = '1';
                 retenu = 0;
@@ -370,7 +375,7 @@ void int_to_binary_signed(char *instruction_binaire,int bit_debut, int bit_fin, 
             else{
                 instruction_binaire[i] = '0';
             }
-            i++;
+            i++; 
         }
         if(i == bit_fin){
             printf("Attention valeur trop négative, cf int_to_binary\n");
