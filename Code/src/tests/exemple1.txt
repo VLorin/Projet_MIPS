@@ -9,4 +9,4 @@ ROTR $8,$8,33
 ADDI $9,$0,0
 BNE $11,$8,-7
 NOP
-NOP
+SYSCALL
