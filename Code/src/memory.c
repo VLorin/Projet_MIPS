@@ -6,14 +6,16 @@ int HI;
 int LO;
 int PC = 0;
 
+
 void print_register(){
+    printf("\nEtat des registres :\n");
     for(int i = 0; i<4; i++){
         for(int j = 0; j<8; j++){
             printf("gpr[%d] = %d\t",i*8+j,gpr[i*8+j]);
         }
         printf("\n");
     }
-    printf("PC = %d\tHI = %08X\tLO = %08X\n",PC,HI,LO);
+    printf("PC = %d\t HI = %08X\t LO = %08X\n",PC,HI,LO);
 }
 
 int *adresse_gpr(){

@@ -1,5 +1,5 @@
 all: main.o translate.o memory.o execution.o
-	gcc -o main main.o translate.o memory.o execution.o
+	gcc -o main main.o translate.o memory.o execution.o -lm
 
 main.o: main.c
 	gcc -c main.c -Wall -o main.o

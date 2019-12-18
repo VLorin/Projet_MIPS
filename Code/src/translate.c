@@ -332,11 +332,12 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
         
         //printf("instruction liste = %s, var1 = %d, var2 = %d, var3 = %d \n", instruction, var1, var2, var3);
         /*
-        printf("binaire dans l'order = ");
+        printf("binaire dans l'ordre = ");
         for(int i = 31; i>=0; i--){
             printf("%c",instruction_binaire[i]);
         }
         printf("\n"); 
+        printf("binaire dans l'ordre inverse = %s\n",instruction_binaire);
         */
         
         
