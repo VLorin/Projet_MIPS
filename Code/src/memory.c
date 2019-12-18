@@ -13,11 +13,10 @@ void print_register(){
         }
         printf("\n");
     }
-    printf("PC = %08X\tHI = %08X\tLO = %08X\n",PC,HI,LO);
+    printf("PC = %d\tHI = %08X\tLO = %08X\n",PC,HI,LO);
 }
 
 int *adresse_gpr(){
-    printf("adresse gpr 0 = %p\n",&gpr);
     return &gpr[0];
 }
 
