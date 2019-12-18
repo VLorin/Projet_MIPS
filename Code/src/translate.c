@@ -23,7 +23,7 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
     int var1, var2, var3;
     while( !feof (fichier_source)){
         fgets (buffer, MAX_LENGTH, fichier_source);
-        printf("%s\n",buffer);
+        //printf("%s\n",buffer);
         sscanf(buffer, "%s ", instruction);
         
         if( strcmp( instruction, "ADDI") == 0){ // Add Immediate Word
@@ -330,12 +330,14 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
            
         }
         
-        //printf("instruction = %s, var1 = %d, var2 = %d, var3 = %d \n", instruction, var1, var2, var3);
+        //printf("instruction liste = %s, var1 = %d, var2 = %d, var3 = %d \n", instruction, var1, var2, var3);
+        /*
         printf("binaire dans l'order = ");
         for(int i = 31; i>=0; i--){
             printf("%c",instruction_binaire[i]);
         }
-        printf("\n");
+        printf("\n"); 
+        */
         
         
         for(int i = 0; i<=31 ; i++){
@@ -398,3 +400,6 @@ void int_to_binary(char *instruction_binaire,int bit_debut, int bit_fin, int val
             valeur=valeur/2;
     }
 }
+
+
+

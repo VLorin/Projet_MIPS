@@ -5,6 +5,14 @@
 #include <stdlib.h>
 
 
-void print_gpr();
+void print_register();
+int *adresse_gpr();
+int *adresse_HI();
+int *adresse_LO();
+int *adresse_PC();
+
+
+void update_gpr();
+
 
 #endif
