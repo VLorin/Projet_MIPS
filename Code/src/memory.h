@@ -5,4 +5,6 @@
 #include <stdlib.h>
 
 
+void print_gpr();
+
 #endif

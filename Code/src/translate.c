@@ -345,7 +345,7 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
         instruction_hexa = strtol(instruction_binaire_inverse, NULL, 2); // binaire => decimal
         fprintf(fichier_instruction,"%08lX\n",instruction_hexa); // decimal => hexa
     }
-    fclose(fichier_source);
+    fclose(fichier_source);      //We close the FILE
     fclose(fichier_instruction);
     
 }
