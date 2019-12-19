@@ -6,9 +6,8 @@ int HI;
 int LO;
 int PC = 0;
 
-
+int memory[64];
 void print_register(){
-    printf("\nEtat des registres :\n");
     for(int i = 0; i<4; i++){
         for(int j = 0; j<8; j++){
             printf("gpr[%d] = %d\t",i*8+j,gpr[i*8+j]);
@@ -32,6 +31,10 @@ int *adresse_LO(){
 
 int *adresse_PC(){
     return &PC;
+}
+
+int *adresse_memory(){
+    return &memory[0];
 }
 
 void update_gpr(){

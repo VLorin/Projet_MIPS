@@ -394,13 +394,9 @@ void int_to_binary_signed(char *instruction_binaire,int bit_debut, int bit_fin, 
         }
     }
 }
-
 void int_to_binary(char *instruction_binaire,int bit_debut, int bit_fin, int valeur){
     for(int i = bit_debut; i<=bit_fin; i++){
             instruction_binaire[i] = (valeur % 2) + '0';
             valeur=valeur/2;
     }
 }
-
-
-

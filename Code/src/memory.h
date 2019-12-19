@@ -10,7 +10,7 @@ int *adresse_gpr();
 int *adresse_HI();
 int *adresse_LO();
 int *adresse_PC();
-
+int *adresse_memory();
 
 void update_gpr();
 

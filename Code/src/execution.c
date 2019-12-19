@@ -13,14 +13,19 @@ void execution(char *nom_fichier_source){
         printf("%s",tableau_instruction[j]);
     }
     printf("\n\n");
+    
+    /* Récupération des adresses des registres et mémoire */
     int *gpr = adresse_gpr();
     int *HI = adresse_HI();
     int *LO = adresse_LO();
     int *PC = adresse_PC();
+    int *memory = adresse_memory();
     long temp;
+    
     if(gpr == NULL){
         printf("ERREUR INIT POINTEUR GPR");
     }
+    /* Début execution */
     
     while((*PC) <= (4*nb_instruction)-1 ){
         //print_register();
@@ -140,8 +145,8 @@ void execution(char *nom_fichier_source){
            
         }
         else if( strcmp( instruction, "NOP") == 0){ // No Operation
+            sscanf(buffer, "%s ", instruction);
         }
-        
         else if( strcmp( instruction, "OR") == 0){ // Or
             
             sscanf(buffer, "%s $%d,$%d,$%d", instruction, &var1, &var2, &var3);
@@ -184,7 +189,11 @@ void execution(char *nom_fichier_source){
             
         }
         update_gpr();
-        
+        #ifdef PASAPAS
+        printf("\n\nInstruction en cours :\t%s\n",buffer);
+        printf("Etat des registres après l'instruction :\n");
+        print_register();
+        #endif
     }
 }
 
@@ -205,7 +214,6 @@ int nombre_instruction(char *nom_fichier_source){
      return nb_line;
      
 }
-
 char **copy_instruction_in_array(char *nom_fichier_source, int nb_instruction){
     FILE *fichier_source_copy = fopen(nom_fichier_source,"r");
     if (fichier_source_copy == NULL){
