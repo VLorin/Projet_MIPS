@@ -20,7 +20,8 @@ void execution(char *nom_fichier_source){
     int *LO = adresse_LO();
     int *PC = adresse_PC();
     int *memory = adresse_memory();
-    long temp;
+    
+    long temp; // pour multiplication et division
     
     if(gpr == NULL){
         printf("ERREUR INIT POINTEUR GPR");
@@ -115,6 +116,8 @@ void execution(char *nom_fichier_source){
         else if( strcmp( instruction, "LW") == 0){ // Load Word
             
             sscanf(buffer, "%s $%d,%d(%d)", instruction, &var1, &var2, &var3);
+            gpr[var1] = (memory[gpr[var3]] << var2) >> var2 ; // var2 = offset
+            
         }
         else if( strcmp( instruction, "MFHI") == 0){ // Move From HI Register
             
@@ -145,7 +148,6 @@ void execution(char *nom_fichier_source){
            
         }
         else if( strcmp( instruction, "NOP") == 0){ // No Operation
-            sscanf(buffer, "%s ", instruction);
         }
         else if( strcmp( instruction, "OR") == 0){ // Or
             
@@ -172,9 +174,10 @@ void execution(char *nom_fichier_source){
             sscanf(buffer, "%s $%d,$%d,$%d", instruction, &var1, &var2, &var3);
             gpr[var1] = gpr[var2] - gpr[var3];
         }
-        else if( strcmp( instruction, "SW") == 0){
+        else if( strcmp( instruction, "SW") == 0){ // Store Word
             
             sscanf(buffer, "%s $%d,%d(%d)", instruction, &var1, &var2, &var2);
+            memory[gpr[var3]] = memory[gpr[var3]] ^ (gpr[var1] >> var2);
 
         }
         else if( strcmp( instruction, "XOR") == 0){
@@ -189,7 +192,8 @@ void execution(char *nom_fichier_source){
             
         }
         update_gpr();
-        #ifdef PASAPAS
+        
+        #ifdef STEP // voir makefile
         printf("\n\nInstruction en cours :\t%s\n",buffer);
         printf("Etat des registres après l'instruction :\n");
         print_register();

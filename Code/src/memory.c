@@ -17,6 +17,15 @@ void print_register(){
     printf("PC = %d\t HI = %08X\t LO = %08X\n",PC,HI,LO);
 }
 
+void print_memory(){
+    for(int i=0; i<8; i++){
+        for(int j=0; j <8 ; j++){
+            printf("memory[%d] = %08X\t", i*8+j, memory[i*8+j]);
+        }
+        printf("\n");
+    }
+}
+
 int *adresse_gpr(){
     return &gpr[0];
 }

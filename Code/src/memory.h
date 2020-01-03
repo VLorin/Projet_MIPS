@@ -12,6 +12,7 @@ int *adresse_LO();
 int *adresse_PC();
 int *adresse_memory();
 
+void print_memory();
 void update_gpr();
 
 

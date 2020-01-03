@@ -13,6 +13,7 @@ int main(int argc, char *argv[]){
     execution(argv[1]);
     printf("\nEtat final des registres :\n");
     print_register();
+    print_memory();
     //printf("%d\n",9 | 2);
     return 0;
 }

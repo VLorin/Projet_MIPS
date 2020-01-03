@@ -11,7 +11,7 @@ memory.o: memory.c memory.h
 	gcc -c memory.c -Wall -o memory.o
 	
 execution.o: execution.c execution.h
-	gcc -c -D PASAPAS execution.c -Wall -o execution.o
+	gcc -c -D STEP execution.c -Wall -o execution.o
 	
 clean:
 	rm -Rf *.o
