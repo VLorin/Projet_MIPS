@@ -23,6 +23,7 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
     int var1, var2, var3;
     while( !feof (fichier_source)){
         fgets (buffer, MAX_LENGTH, fichier_source);
+        if(buffer[0] != '\r' && buffer[0] != '\n'){ // detecte ligne vide
         //printf("%s\n",buffer);
         sscanf(buffer, "%s ", instruction);
         
@@ -202,7 +203,7 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
         }
         else if( strcmp( instruction, "ROTR") == 0){
             
-            sscanf(buffer, "%s $%d,$%d,$%d", instruction, &var1, &var2, &var3);
+            sscanf(buffer, "%s $%d,$%d,%d", instruction, &var1, &var2, &var3);
             instruction_binaire[32]='\n';
             int_to_binary(instruction_binaire,21,31,1); // le bit R1 est mis à 1 ici, à verifier plus tard
             int_to_binary(instruction_binaire,16,20,var2);
@@ -345,8 +346,11 @@ void translate(char *nom_fichier_source, char *nom_fichier_instruction){
             instruction_binaire_inverse[i]=instruction_binaire[31-i];
         }
         instruction_binaire_inverse[32] = '\n';
-        instruction_hexa = strtol(instruction_binaire_inverse, NULL, 2); // binaire => decimal
-        fprintf(fichier_instruction,"%08lX\n",instruction_hexa); // decimal => hexa
+        if( 64 < instruction[0] && instruction[0] < 91){ // si c'est bien une lettre majuscule, i.e une instruction
+            instruction_hexa = strtol(instruction_binaire_inverse, NULL, 2); // binaire => decimal
+            fprintf(fichier_instruction,"%08lX\n",instruction_hexa); // decimal => hexa
+        }
+        }
     }
     fclose(fichier_source);      //We close the FILE
     fclose(fichier_instruction);

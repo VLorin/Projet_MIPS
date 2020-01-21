@@ -22,6 +22,7 @@ void execution(char *nom_fichier_source){
     int *memory = adresse_memory();
     
     long temp; // pour multiplication et division
+    int int_tmp;
     
     if(gpr == NULL){
         printf("ERREUR INIT POINTEUR GPR");
@@ -59,7 +60,7 @@ void execution(char *nom_fichier_source){
             
             sscanf(buffer, "%s $%d,$%d,%d", instruction, &var1, &var2, &var3);
             if(gpr[var1] == gpr[var2]){
-                PC += var3 << 2;
+                *PC += var3 << 2;
             }
         }
         else if( strcmp( instruction, "BGTZ") == 0){ // Branch on Greater Than Zero
@@ -80,7 +81,7 @@ void execution(char *nom_fichier_source){
             
             sscanf(buffer, "%s $%d,$%d,%d", instruction, &var1, &var2, &var3);
             if(gpr[var1] != gpr[var2]){
-                *PC += var3 << 2;
+                *PC += var3  << 2;
             }
         }
         else if( strcmp( instruction, "DIV") == 0){ // Divide Word
@@ -98,7 +99,7 @@ void execution(char *nom_fichier_source){
         else if( strcmp( instruction, "JAL") == 0){ // Jump And Link
             
             sscanf(buffer, "%s %d", instruction, &var1);
-            gpr[31] = *PC + 8; // deux instrutions plus tard
+            gpr[31] = *PC + 4; // deux instrutions plus tard
             *PC = var1 << 2;
             
         }
@@ -111,12 +112,12 @@ void execution(char *nom_fichier_source){
         else if( strcmp( instruction, "LUI") == 0){ // Load Upper Immediate
             
             sscanf(buffer, "%s $%d,%d", instruction, &var1, &var2);
-            gpr[var1] = var3 << 16;
+            gpr[var1] = var2 << 16;
         }
         else if( strcmp( instruction, "LW") == 0){ // Load Word
             
             sscanf(buffer, "%s $%d,%d(%d)", instruction, &var1, &var2, &var3);
-            gpr[var1] = (memory[gpr[var3]] << var2) >> var2 ; // var2 = offset
+            gpr[var1] = memory[gpr[var3]] + var2; // var2 = offset
             
         }
         else if( strcmp( instruction, "MFHI") == 0){ // Move From HI Register
@@ -131,13 +132,15 @@ void execution(char *nom_fichier_source){
         }
         else if( strcmp( instruction, "ROTR") == 0){ // Rotate Word Right
             
-            sscanf(buffer, "%s $%d,$%d,$%d", instruction, &var1, &var2, &var3);
-            gpr[var1] = (gpr[var2] << (32-var3)) + (gpr[var2] % (32-var3)); 
+            sscanf(buffer, "%s $%d,$%d,%d", instruction, &var1, &var2, &var3);
+            int_tmp = gpr[var2];
+            gpr[var1] = (int_tmp >> (var3)) | (int_tmp << (32-var3)); 
         }
         else if( strcmp( instruction, "SLL") == 0){ //Shift Word Left Logical
-            
             sscanf(buffer, "%s $%d,$%d,%d", instruction, &var1, &var2, &var3);
-           gpr[var1] = gpr[var2] << var3;
+            int_tmp = gpr[var2];
+            gpr[var1] = int_tmp << var3 | int_tmp >> (32-var3);
+            
         }
         else if( strcmp( instruction, "MULT") == 0){ // Multiply Word
             
@@ -176,8 +179,8 @@ void execution(char *nom_fichier_source){
         }
         else if( strcmp( instruction, "SW") == 0){ // Store Word
             
-            sscanf(buffer, "%s $%d,%d(%d)", instruction, &var1, &var2, &var2);
-            memory[gpr[var3]] = memory[gpr[var3]] ^ (gpr[var1] >> var2);
+            sscanf(buffer, "%s $%d,%d(%d)", instruction, &var1, &var2, &var3);
+            memory[gpr[var3] + var2] = gpr[var1];
 
         }
         else if( strcmp( instruction, "XOR") == 0){
@@ -211,7 +214,9 @@ int nombre_instruction(char *nom_fichier_source){
     char *buffer_compteur = (char *)malloc(MAX_LENGTH);
      while( !feof (fichier_source_compte)){
         fgets (buffer_compteur, MAX_LENGTH, fichier_source_compte);
+        if(buffer_compteur[0] != '\r' && buffer_compteur[0] != '\n' && buffer_compteur[0] != 35){
         nb_line++;
+        }
      }
      printf("Il y a %d instructions :\n",nb_line);
      fclose(fichier_source_compte);
@@ -230,9 +235,11 @@ char **copy_instruction_in_array(char *nom_fichier_source, int nb_instruction){
     char *buffer_copy = (char *)malloc(MAX_LENGTH);
     while( !feof (fichier_source_copy)){
         fgets (buffer_copy, MAX_LENGTH, fichier_source_copy);
-        tableau_instruction[i] = (char *)malloc((strlen(buffer_copy)+1)*sizeof(char));
-        strcpy(tableau_instruction[i],buffer_copy);
-        i++;
+        if(buffer_copy[0] != '\r' && buffer_copy[0] != '\n' && buffer_copy[0] != '#'){ // detecte lignes vides et commentaire
+            tableau_instruction[i] = (char *)malloc((strlen(buffer_copy)+1)*sizeof(char));
+            strcpy(tableau_instruction[i],buffer_copy);
+            i++;
+        }
      }
      fclose(fichier_source_copy);
      return tableau_instruction;
