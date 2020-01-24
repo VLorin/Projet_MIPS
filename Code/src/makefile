@@ -1,5 +1,5 @@
 all: main.o translate.o memory.o execution.o
-	gcc -o main main.o translate.o memory.o execution.o 
+	gcc -o emul-mips main.o translate.o memory.o execution.o 
 
 main.o: main.c
 	gcc -c main.c -Wall -o main.o
@@ -17,5 +17,5 @@ clean:
 	rm -Rf *.o
 
 unistall:
-	rm -Rf main
+	rm -Rf emul-mips
 	rm -Rf *.o

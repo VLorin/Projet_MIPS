@@ -10,7 +10,7 @@ int memory[64];
 void print_register(){
     for(int i = 0; i<4; i++){
         for(int j = 0; j<8; j++){
-            printf("gpr[%d] = %d\t",i*8+j,gpr[i*8+j]);
+            printf("$%d = \t%d\t",i*8+j,gpr[i*8+j]);
         }
         printf("\n");
     }
